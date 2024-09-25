@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import helper.DateHelper;
 import org.bson.Document;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class MongoDB {
         //更新数据
         //updateMany(collection);
         createAlpha();
+        DateHelper.getNow();
     }
 
 
