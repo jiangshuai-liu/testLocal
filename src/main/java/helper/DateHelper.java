@@ -49,6 +49,7 @@ public class DateHelper extends DateUtils{
     private static final String PARSE_PATTERNS_YMD_END = "yyyyMMdd235959";
     private static final String PARSE_PATTERNS_COLON_HMS = "HH:mm:ss";
 
+
     public static String dateFmt(String dateString, String source, String target) {
         try {
             if (StringHelper.isEmpty(dateString)) {
