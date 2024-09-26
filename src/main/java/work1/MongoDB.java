@@ -7,7 +7,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import helper.DateHelper;
 import org.bson.Document;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * @Title MongoDB
  * @Author Administrator
- * @Description TODO
+ * @Description
  * @Date 2024/9/11 15:31
  * @Version 1.0
  **/
@@ -43,8 +42,8 @@ public class MongoDB {
         //insertOne(collection);
         //更新数据
         //updateMany(collection);
-        createAlpha();
-        DateHelper.getNow();
+        //createAlpha();
+
     }
 
 
