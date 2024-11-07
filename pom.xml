@@ -42,10 +42,11 @@
             <artifactId>bson</artifactId>
             <version>3.12.11</version>
         </dependency>
+
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-core</artifactId>
-            <version>3.12.11</version>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>5.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
