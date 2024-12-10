@@ -7,12 +7,14 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import helper.StringHelper;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @Title MongoDB
@@ -22,8 +24,10 @@ import java.util.Map;
  * @Version 1.0
  **/
 public class MongoDB {
-
-    public static void main(String[] args) {
+    private static int useMinNum=33;
+    private static int maxNum=127;
+    private static int minNum=33;
+    public static void main(String[] args) throws InterruptedException {
         // 创建 MongoDB 连接
         MongoClient mongo = new MongoClient("localhost", 27017);
         // 连接到 MongoDB
@@ -40,9 +44,9 @@ public class MongoDB {
         System.out.println("chose collection : " + collection.getNamespace());
 
         //获得全部集合
-        listCollectionNames(database);
+       // listCollectionNames(database);
         //查询数据
-        find(collection);
+        //find(collection);
         //新增数据
         //insertOne(collection);
         //新增多个数据
@@ -50,9 +54,14 @@ public class MongoDB {
         //更新数据
         //updateMany(collection);
         //随机查询
-        selectUseRandomCode(collection);
+        //selectUseRandomCode(collection);
+        //随机查询p
+        //selectUseRandomCodePro(collection);
         //删除多个数据
         //deleteMany(collection);
+        String sss="2023-09";
+        System.out.println(sss.compareTo("2023-09"));
+
     }
 
 
@@ -75,8 +84,36 @@ public class MongoDB {
             }
         }
     }
-
-
+    /**
+     * 随机码查询
+     * @param collection
+     */
+    private static void selectUseRandomCodePro (MongoCollection<Document> collection){
+        String getStr="";
+        while (true){
+            String getChar=getStr(getStr);
+            System.out.println(getChar);
+            if(getStr.equals(getChar)){
+                System.out.println("含有非法字符");
+                break;
+            }
+            getChar=changeMean(getChar);
+            Pattern phones =Pattern.compile("^"+getChar+".*$", Pattern.CASE_INSENSITIVE);
+            Document document = new Document("description",phones);
+            boolean bool=find(collection,document);
+            if(bool){
+                getStr=getChar;
+                //重置最小值
+                useMinNum=minNum;
+                document = new Document("description",getStr);
+                boolean lastCode=find(collection,document);
+                if(lastCode){
+                    System.out.println("最终随机码："+getStr);
+                    break;
+                }
+            }
+        }
+    }
     /**
      * 创建集合
      * @param database 数据库链接
@@ -194,7 +231,6 @@ public class MongoDB {
                     .append("likes", Common.getRandomCode(8))
                     .append("url", "https://www.runoob.com/mongodb/mongodb")
                     .append("by", "jiangshuai");
-
             writes.add(document);
         }
         collection.insertMany(writes);
@@ -213,4 +249,39 @@ public class MongoDB {
         }
         return map;
     }
+
+
+    /**
+     * 获取字符
+     * @param inStr
+     * @return String
+     */
+    private static String getStr(String inStr){
+        if(useMinNum<maxNum){
+            useMinNum++;
+            return inStr + (char) (useMinNum - 1);
+        }else{
+            return inStr;
+        }
+    }
+
+    /**
+     * 转义特殊符号
+     * @param str
+     * @return
+     */
+    public static String changeMean(String str) {
+        if(StringHelper.isEmpty(str)){
+            return "";
+        }else{
+            String[] fbsArr = { "\\", "$", "(", ")", "*", "+", ".", "[", "]", "?", "^", "{", "}", "|" };
+            for (String key : fbsArr) {
+                if (str.contains(key)) {
+                    str = str.replace(key, "\\" + key);
+                }
+            }
+            return str;
+        }
+    }
+
 }
