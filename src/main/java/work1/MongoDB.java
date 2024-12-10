@@ -24,8 +24,9 @@ import java.util.regex.Pattern;
  * @Version 1.0
  **/
 public class MongoDB {
+    private static int useMinNum=33;
     private static int maxNum=127;
-    private static int minNum=35;
+    private static int minNum=33;
     public static void main(String[] args) throws InterruptedException {
         // 创建 MongoDB 连接
         MongoClient mongo = new MongoClient("localhost", 27017);
@@ -43,9 +44,9 @@ public class MongoDB {
         System.out.println("chose collection : " + collection.getNamespace());
 
         //获得全部集合
-        listCollectionNames(database);
+       // listCollectionNames(database);
         //查询数据
-        find(collection);
+        //find(collection);
         //新增数据
         //insertOne(collection);
         //新增多个数据
@@ -55,9 +56,12 @@ public class MongoDB {
         //随机查询
         //selectUseRandomCode(collection);
         //随机查询p
-        selectUseRandomCodePro(collection);
+        //selectUseRandomCodePro(collection);
         //删除多个数据
         //deleteMany(collection);
+        String sss="2023-09";
+        System.out.println(sss.compareTo("2023-09"));
+
     }
 
 
@@ -88,17 +92,19 @@ public class MongoDB {
         String getStr="";
         while (true){
             String getChar=getStr(getStr);
+            System.out.println(getChar);
             if(getStr.equals(getChar)){
+                System.out.println("含有非法字符");
                 break;
             }
             getChar=changeMean(getChar);
-            Pattern phones =Pattern.compile("^"+getChar+".*$", Pattern.UNIX_LINES);
+            Pattern phones =Pattern.compile("^"+getChar+".*$", Pattern.CASE_INSENSITIVE);
             Document document = new Document("description",phones);
             boolean bool=find(collection,document);
             if(bool){
                 getStr=getChar;
                 //重置最小值
-                minNum=35;
+                useMinNum=minNum;
                 document = new Document("description",getStr);
                 boolean lastCode=find(collection,document);
                 if(lastCode){
@@ -251,9 +257,9 @@ public class MongoDB {
      * @return String
      */
     private static String getStr(String inStr){
-        if(minNum<maxNum){
-            minNum++;
-            return inStr + (char) (minNum - 1);
+        if(useMinNum<maxNum){
+            useMinNum++;
+            return inStr + (char) (useMinNum - 1);
         }else{
             return inStr;
         }
@@ -268,16 +274,13 @@ public class MongoDB {
         if(StringHelper.isEmpty(str)){
             return "";
         }else{
-            String str1 = "*.?+$^[](){}|\\/";
-            StringBuilder sf = new StringBuilder();
-            for (int i = 0; i < str.length(); i++) {
-                String ss = String.valueOf(str.charAt(i));
-                if (str1.contains(ss)) {
-                    ss = "\\" + ss;
+            String[] fbsArr = { "\\", "$", "(", ")", "*", "+", ".", "[", "]", "?", "^", "{", "}", "|" };
+            for (String key : fbsArr) {
+                if (str.contains(key)) {
+                    str = str.replace(key, "\\" + key);
                 }
-                sf.append(ss);
             }
-            return sf.toString();
+            return str;
         }
     }
 
