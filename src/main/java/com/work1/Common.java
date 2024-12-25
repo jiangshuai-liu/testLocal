@@ -1,4 +1,4 @@
-package work1;
+package com.work1;
 
 import java.util.Random;
 

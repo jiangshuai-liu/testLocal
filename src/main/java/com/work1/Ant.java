@@ -1,4 +1,4 @@
-package work1;
+package com.work1;
 
 import java.util.Random;
 
@@ -125,6 +125,7 @@ public class Ant {
         for (int i = 0; i < CITIES - 1; i++) {
             length += distances[tour[i]][tour[i + 1]];
         }
+
         length += distances[tour[CITIES - 1]][tour[0]];
         return length;
     }

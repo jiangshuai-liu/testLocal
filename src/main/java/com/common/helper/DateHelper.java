@@ -1,4 +1,4 @@
-package helper;
+package com.common.helper;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +7,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -52,7 +53,7 @@ public class DateHelper extends DateUtils{
 
     public static String dateFmt(String dateString, String source, String target) {
         try {
-            if (StringHelper.isEmpty(dateString)) {
+            if (StringUtils.isEmpty(dateString)) {
                 return "";
             }
             return formatDate(parseDate(dateString, source), target);
@@ -131,7 +132,47 @@ public class DateHelper extends DateUtils{
         calendar.add(type, amont);
         return FastDateFormat.getInstance(pattern).format(calendar.getTime());
     }
-
+    /**
+     * 计算给定时间多少个月之后的时间
+     * @param date
+     * @param month
+     * @param pattern
+     * @return String
+     */
+    public static String addMonth (String date,String pattern,int month){
+        String nowDate = null;
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        try {
+            Date parse = format.parse(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(parse);
+            calendar.add(Calendar.MONTH, month);
+            nowDate = format.format(calendar.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return nowDate;
+    }
+    /**
+     * <p>功能描述：[  对比输入的月份和当前月份之间的差  ]</p>
+     * @ Author：
+     * @ Datetime： 2021/6/24 13:34
+     */
+    public static String monthDifference(String maxMonth, String minMonth) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            Calendar bef = Calendar.getInstance();
+            Calendar aft = Calendar.getInstance();
+            bef.setTime(sdf.parse(maxMonth));
+            aft.setTime(sdf.parse(minMonth));
+            int results = aft.get(Calendar.MONTH) - bef.get(Calendar.MONTH);
+            int month = (aft.get(Calendar.YEAR) - bef.get(Calendar.YEAR)) * 12;
+            return String.valueOf(Math.abs(month + results));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      * 得到当前日期前后多少天，月，年的日期字符串
      * @param amont 数量，前为负数，后为正数
@@ -504,7 +545,7 @@ public class DateHelper extends DateUtils{
      * @return 1 date1>date2;-1 date1<date2;0 date1=date2
      */
     public static String dateStrFormat(String dateString,String sourceFormat,String targetFormat) {
-        if(StringHelper.isEmpty(dateString)){
+        if(StringUtils.isEmpty(dateString)){
             return dateString;
         }
         Date date= parseDate(dateString, sourceFormat);
@@ -1043,13 +1084,16 @@ public class DateHelper extends DateUtils{
             case 1: {
                 // 24小时制
                 cal.add(Calendar.HOUR, time);
+                break;
             }
             case 3: {
                 // 24小时制
                 cal.add(Calendar.MINUTE, time);
+                break;
             }
             case 2:{
                 cal.add(Calendar.SECOND, time);
+                break;
             }
             default:
         }
@@ -1065,7 +1109,7 @@ public class DateHelper extends DateUtils{
      */
     private static boolean checkHoliday(Date tomorrow, String jrs, String gzrs) {
         boolean b = false;
-        if(StringHelper.isEmpty(jrs) || StringHelper.isEmpty(gzrs)) {
+        if(StringUtils.isEmpty(jrs) || StringUtils.isEmpty(gzrs)) {
             return false;
         }
 

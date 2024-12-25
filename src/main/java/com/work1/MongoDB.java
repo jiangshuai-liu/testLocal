@@ -1,5 +1,6 @@
-package work1;
+package com.work1;
 
+import com.common.util.StringUtils;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.FindIterable;
@@ -7,7 +8,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import helper.StringHelper;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
@@ -271,7 +271,7 @@ public class MongoDB {
      * @return
      */
     public static String changeMean(String str) {
-        if(StringHelper.isEmpty(str)){
+        if(StringUtils.isEmpty(str)){
             return "";
         }else{
             String[] fbsArr = { "\\", "$", "(", ")", "*", "+", ".", "[", "]", "?", "^", "{", "}", "|" };

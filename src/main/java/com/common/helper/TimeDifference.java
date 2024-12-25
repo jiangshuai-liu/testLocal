@@ -1,4 +1,4 @@
-package helper;
+package com.common.helper;
 
 import lombok.Data;
 
